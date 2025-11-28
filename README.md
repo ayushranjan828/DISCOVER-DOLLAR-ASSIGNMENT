@@ -1,27 +1,93 @@
-In this DevOps task, you need to build and deploy a full-stack CRUD application using the MEAN stack (MongoDB, Express, Angular 15, and Node.js). The backend will be developed with Node.js and Express to provide REST APIs, connecting to a MongoDB database. The frontend will be an Angular application utilizing HTTPClient for communication.  
+# Discover Dollar Assignment
 
-The application will manage a collection of tutorials, where each tutorial includes an ID, title, description, and published status. Users will be able to create, retrieve, update, and delete tutorials. Additionally, a search box will allow users to find tutorials by title.
+## 1. Clone the Repository
 
-## Project setup
+``` bash
+git clone git@github.com:ayushranjan828/DISCOVER-DOLLAR-ASSIGNMENT.git
+cd DISCOVER-DOLLAR-ASSIGNMENT
+```
 
-### Node.js Server
+## 2. Pull Docker Images from Docker Hub
 
-cd backend
+### Pull Frontend Image
 
-npm install
+``` bash
+docker pull ayushranjan94300/frontend
+```
 
-You can update the MongoDB credentials by modifying the `db.config.js` file located in `app/config/`.
+### Pull Backend Image
 
-Run `node server.js`
+``` bash
+docker pull ayushranjan94300/backend
+```
 
-### Angular Client
+## 3. Run Containers on Docker Desktop / Terminal
 
-cd frontend
+### Run Backend
 
-npm install
+``` bash
+docker run -d -p 8080:8080 ayushranjan94300/backend
+```
 
-Run `ng serve --port 8081`
+Access in browser:\
+http://localhost:8080
 
-You can modify the `src/app/services/tutorial.service.ts` file to adjust how the frontend interacts with the backend.
+### Run Frontend
 
-Navigate to `http://localhost:8081/`
+``` bash
+docker run -d -p 8081:80 ayushranjan94300/frontend
+```
+
+Access in browser:\
+http://localhost:8081
+
+## 4. Docker Images and Push Instructions
+
+This repo includes Dockerfiles for both the backend and frontend and a
+helper PowerShell script to build and push images to Docker Hub.
+
+-   Backend Dockerfile: `backend/Dockerfile` (Node 18, port 8080)
+-   Frontend Dockerfile: `frontend/Dockerfile` (multi‑stage Nginx build,
+    port 80)
+-   docker-compose.yml supports configurable host ports (frontend
+    defaults to 8081)
+
+### Build & Push Images (PowerShell)
+
+#### 1. Login
+
+``` powershell
+docker login
+```
+
+#### 2. Run build & push script
+
+``` powershell
+.\scriptsuild-and-push.ps1 your-dockerhub-username
+```
+
+Or set env variable:
+
+``` powershell
+$env:DOCKERHUB_USER = 'your-dockerhub-username'; .\scriptsuild-and-push.ps1
+```
+
+### docker-compose default
+
+``` powershell
+docker-compose up --build
+```
+
+-   Backend → http://localhost:5000\
+-   Frontend → http://localhost:8081
+
+### Override Ports
+
+``` powershell
+$env:BACKEND_PORT = '5000'
+$env:FRONTEND_PORT = '4200'
+docker-compose up --build
+```
+
+-   Backend → http://localhost:5000\
+-   Frontend → http://localhost:4200
